@@ -42,24 +42,23 @@
 
 | Feature | Status |
 | :--- | :--- | 
-| **Flashing** | ✅ Works |
-| **USB Networking** | ❓ *Untested* |
-| **Battery** | ❓ *Untested* |
-| **Screen** | ✅ Works |
-| **Touchscreen**| ✅ Works |
-| **3D Acceleration**| ❓ *Untested* |
-| **Audio** | ❓ *Untested* |
-| **Camera** | ❓ *Untested* |
-| **WiFi** | ❓ *Untested* |
-| **Bluetooth** | ❓ *Untested* |
-| **GPS** | ❓ *Untested* |
-| **Calls** | ❓ *Untested* |
-| **SMS** | ❓ *Untested* |
-| **Mobile data**| ❓ *Untested* |
-| **FDE** | ❓ *Untested* |
-| **USB OTG** | ❓ *Untested* |
-| **Accelerometer** | ❓ *Untested* | | |
-
+| **Flashing** | ![](https://img.shields.io/badge/Works-success) |
+| **USB Networking** | *Untested* |
+| **Battery** | *Untested* |
+| **Screen** | ![](https://img.shields.io/badge/Works-success) |
+| **Touchscreen**| ![](https://img.shields.io/badge/Works-success) |
+| **3D Acceleration**| *Untested* |
+| **Audio** | *Untested* |
+| **Camera** | *Untested* |
+| **WiFi** | *Untested* |
+| **Bluetooth** | *Untested* |
+| **GPS** | *Untested* |
+| **Calls** | *Untested* |
+| **SMS** | *Untested* |
+| **Mobile data**| *Untested* |
+| **FDE** | *Untested* |
+| **USB OTG** | *Untested* |
+| **Accelerometer** | *Untested* |
 ---
 
 # postmarketOS on OPPO A37f (MSM8916)
