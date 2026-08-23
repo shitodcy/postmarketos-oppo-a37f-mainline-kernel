@@ -5,8 +5,7 @@
 > **Status:** *booting*
 
 <div align="center">
-  <!-- Ganti URL_GAMBAR_KAMU_DISINI dengan path gambar/foto HP kamu di repositori (misal: images/neofetch.png) -->
-  <img src="[neofetch](https://github.com/shitodcy/pmos/blob/main/assets/neofetch.jpeg)" width="350" alt="postmarketOS booting on OPPO A37f">
+  <img src="https://github.com/shitodcy/pmos/blob/main/assets/neofetch.jpeg" width="350" alt="postmarketOS booting on OPPO A37f">
   <p><i>Neofetch</i></p>
 </div>
 
