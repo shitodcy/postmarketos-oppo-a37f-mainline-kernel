@@ -1,0 +1,48 @@
+# Reference: <https://postmarketos.org/deviceinfo>
+# Please use double quotes only. You can source this file in shell scripts.
+
+deviceinfo_format_version="0"
+deviceinfo_name="Oppo A37"
+deviceinfo_manufacturer="Oppo"
+deviceinfo_codename="oppo-a37f"
+deviceinfo_year="2016"
+deviceinfo_dtb="qcom/msm8916-oppo-a37"
+deviceinfo_kernel="postmarketos-qcom-msm8916"
+deviceinfo_modules_initfs="panel-ilitek-ili9881c rmi-i2c lis3dh-i2c lm3630a"
+deviceinfo_usb_network="true"
+deviceinfo_external_storage="true"
+deviceinfo_flash_method="fastboot"
+deviceinfo_arch="aarch64"
+
+# Device related
+deviceinfo_gpu_depth_buffer_workaround="false"
+deviceinfo_drm="true"
+deviceinfo_getty="ttyMSM0;115200"
+
+# Bootloader related
+# Flash lk2nd via TWRP (easiest method):
+#   TWRP > Install > Install Image > select lk2nd-a37f-adtb.img > Boot partition
+# After lk2nd is installed, standard fastboot works for pmos flashing
+# Alternative (if no TWRP): flash via EDL with emmcdl
+
+# extlinux (via lk2nd)
+deviceinfo_generate_extlinux_config_extlinux="true"
+deviceinfo_dtb_extlinux="qcom/msm8916-oppo-a37"
+deviceinfo_boot_filesystem_extlinux="ext2"
+
+# Partition layout
+# OPPO uses msdos partition table (not GPT)
+# lk2nd does not support GPT for subpartitions/SD cards
+deviceinfo_partition_type="msdos"
+
+# Hardware notes (from physical device verification, 2026-08-18):
+#   Panel: OPPO 15399 BOE ILI9881C 720p video mode DSI
+#   Touchscreen: Synaptics S3203 (i2c 5-0020, RMI4 F11) - mainline OK
+#   Accelerometer: LIS3DH (i2c 0-0019) - mainline OK
+#   Magnetometer: MMC3416x (i2c 0-0030) - NO mainline driver
+#   ALS/Proximity: APDS9921 (i2c 0-0053) - NO mainline driver
+#   Charger: BQ24196 (i2c 4-006b) - mainline OK
+#   Backlight: LM3630A (i2c 5-0038) - mainline OK
+#   Volume keys: TLMM 107 (up), TLMM 108 (down) - NOT on PMIC resin
+#   Board-ID: qcom,board-id = <8 0 15399> (three-cell, MTP subtype 15399)
+deviceinfo_usb_network="true"

@@ -1,0 +1,21 @@
+# Panel: OPPO 15399 BOE ILI9881C (verified on physical device)
+panel-ilitek-ili9881c
+
+# Touchscreen: Synaptics S3203 via RMI4 (i2c 5-0020, uses F11 function)
+rmi-i2c
+
+# Accelerometer: ST LIS3DH (i2c 0-0019)
+lis3dh-i2c
+
+# Backlight: LM3630A (i2c 5-0038, HWEN on TLMM 69)
+lm3630a
+
+# MSM display
+msm
+
+# Common MSM8916 panel modules (for potential multi-panel support)
+panel-simple
+
+# USB networking for SSH failsafe
+g_ether
+usb_f_rndis

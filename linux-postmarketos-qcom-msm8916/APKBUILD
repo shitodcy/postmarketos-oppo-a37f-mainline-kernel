@@ -1,0 +1,116 @@
+# Kernel config based on: arch/arm64/configs/msm8916_defconfig
+maintainer="Nikita Travkin <nikita@trvn.ru>"
+_flavor="postmarketos-qcom-msm8916"
+pkgname=linux-$_flavor
+pkgver=6.12.1
+# When making kernel config changes please also submit a PR to
+# https://github.com/msm8916-mainline/linux/blob/master/kernel/configs/pmos.config
+# since the kernel config is regenerated on upgrades and all changes will be lost!
+pkgrel=6
+pkgdesc="Mainline kernel fork for Qualcomm MSM8909/MSM8916/MSM8939 devices"
+arch="aarch64 armv7"
+url="https://github.com/msm8916-mainline/linux"
+license="GPL-2.0-only"
+options="
+	!check
+	!strip
+	!tracedeps
+	pmb:cross-native
+	pmb:kconfigcheck-community
+	pmb:kconfigcheck-uefi
+"
+makedepends="
+	bison
+	clang
+	elfutils-dev
+	findutils
+	flex
+	linux-headers
+	lld
+	llvm
+	openssl-dev
+	pahole
+	perl
+	postmarketos-installkernel
+	python3
+	zstd
+"
+replaces="linux-postmarketos-qcom-msm8909 linux-postmarketos-qcom-msm8939"
+
+# Architecture
+case "$CARCH" in
+	aarch64) _carch="arm64" ;;
+	arm*)    _carch="arm" ;;
+esac
+
+# Source
+_tag=v${pkgver//_/-}-msm8916
+source="
+	panel-oppo-a37-boe-ili9881c.c
+	$pkgname-$_tag.tar.gz::$url/archive/$_tag.tar.gz
+	config-$_flavor.aarch64
+	config-$_flavor.armv7
+	0001-kbuild-Add-fno-builtin-wcslen.patch
+	0002-oppo-a37-panel-driver.patch
+"
+builddir="$srcdir/linux-${_tag#v}"
+
+prepare() {
+	default_prepare
+	cp "$srcdir/config-$_flavor.$CARCH" .config
+	cp "$srcdir/panel-oppo-a37-boe-ili9881c.c" drivers/gpu/drm/panel/msm8916-generated/
+	echo "obj-y += panel-oppo-a37-boe-ili9881c.o" >> drivers/gpu/drm/panel/msm8916-generated/Makefile
+	sed -i "/pinctrl-0 = <&blsp_uart2_console_default>;/d" arch/arm64/boot/dts/qcom/msm8916-oppo-a37.dts
+	sed -i "/pinctrl-1 = <&blsp_uart2_console_sleep>;/d" arch/arm64/boot/dts/qcom/msm8916-oppo-a37.dts
+	sed -i "/pinctrl-names = \"default\", \"sleep\";/d" arch/arm64/boot/dts/qcom/msm8916-oppo-a37.dts
+	echo 'dtb-$(CONFIG_ARCH_QCOM) += msm8916-oppo-a37.dtb' >> arch/arm64/boot/dts/qcom/Makefile
+}
+
+build() {
+	unset LDFLAGS
+	make ARCH="$_carch" LLVM=1 HOSTLDFLAGS="-fuse-ld=lld" \
+		KBUILD_BUILD_VERSION=$((pkgrel + 1 ))
+}
+
+package() {
+	mkdir -p "$pkgdir"/boot
+
+	_install_targets="modules_install dtbs_install"
+
+	if [ -e "$builddir/arch/$_carch/boot/vmlinuz.efi" ]; then
+		# ZBOOT EFI decompressor for EFI booting
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz.efi" \
+			"$pkgdir/boot/linux.efi"
+
+		# Old GZIP'd kernel image for boot.img compatibility
+		install -Dm644 "$builddir/arch/$_carch/boot/vmlinuz" \
+			"$pkgdir/boot/vmlinuz"
+	elif [ "$_carch" = "arm64" ]; then
+		echo "WARNING: CONFIG_ZBOOT not enabled!"
+		install -Dm644 "$builddir/arch/$_carch/boot/Image.gz" \
+			"$pkgdir/boot/vmlinuz"
+	else
+		_install_targets="zinstall modules_install dtbs_install"
+	fi
+
+	make $_install_targets \
+		ARCH="$_carch" \
+		LLVM=1 \
+		INSTALL_PATH="$pkgdir"/boot \
+		INSTALL_MOD_PATH="$pkgdir"/usr \
+		INSTALL_MOD_STRIP=1 \
+		INSTALL_DTBS_PATH="$pkgdir"/boot/dtbs
+	rm -f "$pkgdir"/usr/lib/modules/*/build "$pkgdir"/usr/lib/modules/*/source
+
+	install -D "$builddir"/include/config/kernel.release \
+		"$pkgdir"/usr/share/kernel/"$_flavor"/kernel.release
+}
+
+sha512sums="
+4a6cf8fba3e2b3e10ab3597a0ba0ce591003160067193d4b4048d9d77880c2730843bba61473f3eef9e443d4abd48fcd4e8ecdbe07980a6f03daf3cd7ec09780  panel-oppo-a37-boe-ili9881c.c
+e46fecfdab77f26c5127ddfd057d31bdf441da7fbf233cd574b396e762ea8992af65f577c595bab6761d1d339016733eb3ab652bf3a221e8b1f6bad4aa6adef5  linux-postmarketos-qcom-msm8916-v6.12.1-msm8916.tar.gz
+d70c136069227f320daf17f69186bfbff311fbeb1f24d284e7829e0afd441a8d2094e41e9e20aaf84345e5108819be22e94536f0abd4ebc3e0ced438f96514bc  config-postmarketos-qcom-msm8916.aarch64
+4af33dffa3e8eaadbde4d4a1350c36003e39bf35b632fa509d53a3fa17b2d5c5a51d24ce5e315e3485dbc71dc34162ed11c8caa309e9cbdf9af7e038c1a708c1  config-postmarketos-qcom-msm8916.armv7
+2a5c20bd9da57e42767fa70eb1aa27623e4013b5dadc3f35508e1497fb4bfd53d8775c372eea8c4d95bd12eff43f23c7a4acfb219313dcb7915643804fc73cb2  0001-kbuild-Add-fno-builtin-wcslen.patch
+bd2b1d79bd429963a246a276515865726e21bda945a9061d8c5a85795da8c6c4efa2d050154622d69eee278825ee9fa8ed75f0fd8eecf6fde29ddb0eecacf74b  0002-oppo-a37-panel-driver.patch
+"

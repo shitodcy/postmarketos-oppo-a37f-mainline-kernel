@@ -1,0 +1,29 @@
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -200,6 +200,16 @@
+ 	  Say Y here if you want to enable support for BOE
+ 	  TV101WUM-NL6 1920x1200 DSI video mode panel.
+ 
++config DRM_PANEL_ILITEK_ILI9881C
++	tristate "Ilitek ILI9881C based panels"
++	depends on OF
++	depends on DRM_MIPI_DSI
++	depends on BACKLIGHT_CLASS_DEVICE
++	help
++	  Say Y here if you want to enable support for Ilitek ILI9881C
++	  based panels, such as the BOE 15399 720p video mode panel
++	  used in the Oppo A37f (oppo-a37).
++
+ config DRM_PANEL_BOE_TV105WUM_NW0
+ 	tristate "BOE TV105WUM-NW0 10.5\" 1920x1200 DSI video mode panel"
+ 	depends on OF
+--- a/drivers/gpu/drm/panel/Makefile
++++ b/drivers/gpu/drm/panel/Makefile
+@@ -21,6 +21,7 @@
+ obj-$(CONFIG_DRM_PANEL_BOE_BF060Y8M_AJ0) += panel-boe-bf060y8m-aj0.o
+ obj-$(CONFIG_DRM_PANEL_BOE_TH101MB31IG002_28A) += panel-boe-th101mb31ig002-28a.o
+ obj-$(CONFIG_DRM_PANEL_BOE_TV101WUM_NL6) += panel-boe-tv101wum-nl6.o
++obj-$(CONFIG_DRM_PANEL_ILITEK_ILI9881C) += panel-oppo-a37-boe-ili9881c.o
+ obj-$(CONFIG_DRM_PANEL_BOE_TV105WUM_NW0) += panel-boe-tv105wum-nw0.o
+ obj-$(CONFIG_DRM_PANEL_CAANOO) += panel-caanoo.o
+ obj-$(CONFIG_DRM_PANEL_DATAIMAGE_SA3200P16A_A00) += panel-dataimage-sa3200p16a-a00.o
