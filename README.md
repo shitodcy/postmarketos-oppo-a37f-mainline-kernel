@@ -50,7 +50,7 @@
 | **3D Acceleration**| *Untested* |
 | **Audio** | *Untested* |
 | **Camera** | *Untested* |
-| **WiFi** | *Untested* |
+| **WiFi** | ![](https://img.shields.io/badge/Works-success) |
 | **Bluetooth** | *Untested* |
 | **GPS** | *Untested* |
 | **Calls** | *Untested* |
