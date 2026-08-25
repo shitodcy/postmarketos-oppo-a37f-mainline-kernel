@@ -1,0 +1,50 @@
+#!/sbin/openrc-run
+#
+# Custom USB Gadget Initialization for OPPO A37f
+#
+
+name="usb-network-fix"
+description="Initialize USB Gadget ConfigFS"
+
+depend() {
+	after sysfs
+	before networking
+}
+
+start() {
+	ebegin "Starting USB ConfigFS Gadget"
+
+	# Wait for configfs to mount
+	if ! grep -q configfs /proc/mounts; then
+		eerror "configfs not mounted!"
+		return 1
+	fi
+
+	cd /sys/kernel/config/usb_gadget
+	mkdir -p g1
+	cd g1
+
+	echo "0x1d6b" > idVendor
+	echo "0x0104" > idProduct
+	
+	mkdir -p strings/0x409
+	echo "Linux Foundation" > strings/0x409/manufacturer
+	echo "Multifunction Composite Gadget" > strings/0x409/product
+	
+	mkdir -p configs/c.1
+	mkdir -p functions/rndis.usb0
+	ln -s functions/rndis.usb0 configs/c.1 2>/dev/null || true
+	
+	echo "ci_hdrc.0" > UDC
+	
+	ip link set usb0 up
+	ip addr add 172.16.42.1/24 dev usb0
+
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping USB ConfigFS Gadget"
+	echo "" > /sys/kernel/config/usb_gadget/g1/UDC
+	eend $?
+}

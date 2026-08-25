@@ -1,0 +1,4 @@
+#!/bin/sh
+# Enable the custom USB gadget network fix
+rc-update add usb-network-fix default
+exit 0

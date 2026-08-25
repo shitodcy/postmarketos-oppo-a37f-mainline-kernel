@@ -4,23 +4,27 @@ maintainer="Azunya <azunya@example.com>"
 pkgname=device-oppo-a37f
 pkgdesc="Oppo A37 (A37f)"
 pkgver=1
-pkgrel=3
+pkgrel=5
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
+install="$pkgname.post-install"
 depends="
 	linux-postmarketos-qcom-msm8916
 	postmarketos-base
 	soc-qcom-msm8916
 	openssh
 	neofetch
+	linux-firmware-qcom
 "
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
+	usb-network-fix.initd
+	disable-random-mac.conf
 "
 subpackages="$pkgname-kernel-lk2nd:kernel_lk2nd"
 
@@ -30,6 +34,8 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+	install -Dm755 "$srcdir"/usb-network-fix.initd "$pkgdir"/etc/init.d/usb-network-fix
+	install -Dm644 "$srcdir"/disable-random-mac.conf "$pkgdir"/etc/NetworkManager/conf.d/disable-random-mac.conf
 }
 
 kernel_lk2nd() {
@@ -44,7 +50,9 @@ kernel_lk2nd() {
 }
 
 sha512sums="
-11663841a07b37e2484695d697c0129e1a23d6a9d4c3be361047b4e53c669e7d6d39e665d82856860f5fbe93f65f2440c4aa3cc4a5ad7840a7e6f893308d1f57  deviceinfo
-476a65269bc5519f02b05fd92e3ace78c86309c616d8e4add1ef72a1772764b70a7625db8dfd84e0adc6c2431c905ed6e993058172dafaf5ce95332612e20784  kernel-cmdline.conf
+f0079a40d711934f5b75f635f1a969252aef5898f65966192b036b69cd90d73d85457990de748cbd1563fb79ca978ba40b4df7aedc7ba505f8f46c485f986d23  deviceinfo
+acb1470d13cded054eedf6308ed035cddcfcbe88f421e394937ef88c81df401a28e4dfd8831d606050a615396522857679b986468c511c3f00668116c7ff338b  kernel-cmdline.conf
 5e570ee0f9262ff711484117f348197cb6318bd72e7bc14b089156610414228b075ddd526683fe789f55c661c29b758269abc244cefb0dae24396fa1ab1fc2c1  modules-initfs
+a106e6a747b26062c467acb45dc5f1ce4bc9d2e5d0843df18145425e35fe012a815dbfb08db551bc0482136862f6b60f103a982fcc20e6a7b3a5ca3b4ea764d2  usb-network-fix.initd
+101ea2238dd9c3e7c8597022e113fa29f9df93387dd1755e3e4d7df9c9571a271f71a390c0b96c5dade36f754bdd41a759555a2ad31cb3423ee74dd342d0909c  disable-random-mac.conf
 "

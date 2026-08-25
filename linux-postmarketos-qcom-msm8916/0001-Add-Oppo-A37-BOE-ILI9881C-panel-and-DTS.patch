@@ -82,6 +82,11 @@ index 000000000..225c2c6f2
 +		stdout-path = "serial0";
 +	};
 +
++	dummy_extcon: dummy_extcon {
++		compatible = "extcon-usb-gpio";
++		vbus-gpio = <&msmgpio 107 (GPIO_ACTIVE_HIGH)>;
++	};
++
 +	/*
 +	 * Baterai varian "high": 4.4 V / 2580 mAh (qcom,fcc-mah).
 +	 * Downstream juga punya varian 4.35 V / 2420 mAh — dipilih runtime lewat
@@ -120,12 +125,7 @@ index 000000000..225c2c6f2
 +
 +		label = "GPIO Buttons";
 +
-+		button-volume-up {
-+			label = "Volume Up";
-+			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_VOLUMEUP>;
-+		};
-+
+
 +		/*
 +		 * Volume down di TLMM 108, bukan di PMIC resin seperti kebanyakan
 +		 * device msm8916. Dikonfirmasi di perangkat: /proc/interrupts memuat
@@ -575,11 +575,11 @@ index 000000000..225c2c6f2
 +&usb {
 +	status = "okay";
 +	dr_mode = "peripheral";
-+	extcon = <&pm8916_usbin>;
++	extcon = <&dummy_extcon>;
 +};
 +
 +&usb_hs_phy {
-+	extcon = <&pm8916_usbin>;
++	extcon = <&dummy_extcon>;
 +};
 +
 +&venus {

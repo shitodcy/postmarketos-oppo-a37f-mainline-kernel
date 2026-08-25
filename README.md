@@ -83,6 +83,32 @@ Porting postmarketOS to the OPPO A37f was challenging due to several strict secu
    - `pmbootstrap` injected `nomodeset` into `extlinux.conf`, disabling the DRM driver and leaving the screen completely dead.
    - The kernel was outputting logs exclusively to the serial console (`ttyMSM0`). By adding `console=tty0`, the Linux boot logs were forced onto the screen, and we removed `nomodeset` to allow the DRM driver to load properly.
 
+5. **USB Networking & `sudo` Permissions**:
+   - The device's battery charger driver (`bq24190`) was missing from the kernel configuration, which caused the Battery Management System (`pm8916-bms`) to hang indefinitely in deferred probing. As a result, the USB controller could never detect the cable connection (VBUS).
+   - To force USB enumeration, we injected a hardware hack into the Device Tree (DTB) that repurposed the physical Volume Up button GPIO (`<&msmgpio 107 (GPIO_ACTIVE_HIGH)>`) into a `dummy_extcon` (virtual VBUS trigger).
+   - During the overlay injection, using `cp -a` accidentally inherited the host user's ownership (1000:1000) into the rootfs `/etc` directory. This triggered a fatal `sudo: invalid configuration: /etc must be owned by root` lockout. It was resolved by injecting a `chown -R 0:0 /sysroot/etc` step directly into the `initramfs` hook to repair permissions before boot.
+   - **How to apply the manual fix:** In case of a fresh installation, the `system` partition's default DTB and initramfs will overwrite our hacks. To re-apply the USB and `sudo` fixes, boot the device into TWRP and run the following ADB commands from your host machine to manually inject the patched files into the boot partition:
+     ```bash
+     adb shell "mkdir -p /mnt/pmos_boot && mount -t ext2 /dev/block/bootdevice/by-name/system /mnt/pmos_boot" && \
+     adb push /tmp/msm8916-oppo-a37-fixed-v3.dtb /mnt/pmos_boot/msm8916-oppo-a37.dtb && \
+     adb push /tmp/initramfs_fixed_v2 /mnt/pmos_boot/initramfs && \
+     adb shell "sync && umount /mnt/pmos_boot"
+     ```
+
+6. **WiFi Hotspot & MAC Randomization**:
+   - NetworkManager defaults to MAC Address Randomization (assigning MACs starting with `02:...`) when connecting to networks.
+   - However, many mobile hotspots (Android/iOS) actively block or ignore DHCP requests from randomized MACs, resulting in timeouts (`IP configuration could not be reserved`).
+   - The fix was to enforce the hardware's permanent MAC address by creating `/etc/NetworkManager/conf.d/disable-random-mac.conf` with `wifi.scan-rand-mac-address=no` and `wifi.cloned-mac-address=permanent`.
+
+7. **USB Extcon Dependency Cycle & Black Screen**:
+   - We faced a persistent bug where the USB gadget driver failed to load, leading to a black screen after the kernel jump and a `deferred probe pending` loop for the USB controller (`78d9000.usb`).
+   - This was diagnosed as an extcon dependency cycle. The fix involved correcting our `dummy_extcon` driver initialization in the DTB. We changed the `compatible` string to `"linux,extcon-usb-gpio"` (instead of just `"extcon-usb-gpio"`) and updated the property to `vbus-gpios` (from the legacy `vbus-gpio`). This successfully initialized the UDC, breaking the cycle and enabling the `172.16.42.1` USB network tethering.
+
+8. **Missing WiFi Firmware (`linux-firmware-qcom`)**:
+   - The original port lacked the proprietary firmware required by the WCN3620 chip to initialize Wi-Fi (`wlan0`). When users generated a fresh rootfs via `pmbootstrap install`, Wi-Fi would silently fail.
+   - We injected the `linux-firmware-qcom` package into the `device-oppo-a37f`'s `APKBUILD` dependencies to permanently bake the proprietary firmware into the `pmOS_root.img`. This ensures `wlan0` is always available out-of-the-box.
+
+
 ## Installation Instructions
 
 We have provided a fully automated TWRP installer zip that handles the complex formatting and placement of files.
@@ -115,3 +141,4 @@ We have provided a fully automated TWRP installer zip that handles the complex f
 4. **Reboot**:
    Go to Reboot -> System. 
    You will briefly see the OPPO logo, followed by the `lk2nd` log (`Jumping to kernel via monitor`), and finally the postmarketOS booting sequence with the Buffyboard on-screen keyboard!
+
