@@ -142,3 +142,55 @@ We have provided a fully automated TWRP installer zip that handles the complex f
    Go to Reboot -> System. 
    You will briefly see the OPPO logo, followed by the `lk2nd` log (`Jumping to kernel via monitor`), and finally the postmarketOS booting sequence with the Buffyboard on-screen keyboard!
 
+## Build from Source (pmbootstrap)
+
+If you want to build the postmarketOS images from source yourself:
+
+1. **Clone this repository**
+   ```bash
+   git clone https://github.com/shitodcy/pmos.git
+   cd pmos
+   ```
+
+2. **Initialize pmbootstrap**
+   ```bash
+   pmbootstrap init
+   ```
+   *(Select any random device for now, we will re-initialize later).*
+
+3. **Copy Porting Files**
+   Copy the device and kernel packages into your local `pmaports` tree:
+   ```bash
+   cp -r device-oppo-a37f ~/.local/var/pmbootstrap/cache_git/pmaports/device/testing/
+   cp -r linux-postmarketos-qcom-msm8916 ~/.local/var/pmbootstrap/cache_git/pmaports/device/testing/
+   ```
+
+4. **Update Checksums**
+   ```bash
+   pmbootstrap checksum device-oppo-a37f linux-postmarketos-qcom-msm8916
+   ```
+
+5. **Select Device**
+   Run init again and select `oppo` -> `a37f` (and choose your preferred UI):
+   ```bash
+   pmbootstrap init
+   ```
+
+6. **Build and Export**
+   ```bash
+   pmbootstrap build device-oppo-a37f
+   pmbootstrap install --split
+   pmbootstrap export
+   ```
+
+7. **Create TWRP Installer**
+   ```bash
+   cd twrp_installer
+   cp /tmp/postmarketOS-export/vmlinuz pmos_boot/
+   cp /tmp/postmarketOS-export/initramfs pmos_boot/
+   cp /tmp/postmarketOS-export/dtbs/msm8916-oppo-a37.dtb pmos_boot/
+   
+   zip -r9 ../pmos-oppo-a37f-installer.zip META-INF lk2nd.img pmos_boot
+   ```
+   You can now flash `pmos-oppo-a37f-installer.zip` and `/tmp/postmarketOS-export/oppo-a37f-root.img` as described in the Installation Instructions above.
+
