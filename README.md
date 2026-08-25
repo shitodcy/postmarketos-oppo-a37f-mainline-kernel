@@ -43,8 +43,8 @@
 | Feature | Status |
 | :--- | :--- | 
 | **Flashing** | ![](https://img.shields.io/badge/Works-success) |
-| **USB Networking** | *Untested* |
-| **Battery** | *Untested* |
+| **USB Networking** | ![](https://img.shields.io/badge/Works-success) |
+| **Battery** | ![](https://img.shields.io/badge/Works-success) |
 | **Screen** | ![](https://img.shields.io/badge/Works-success) |
 | **Touchscreen**| ![](https://img.shields.io/badge/Works-success) |
 | **3D Acceleration**| *Untested* |
