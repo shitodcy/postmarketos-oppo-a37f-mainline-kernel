@@ -51,13 +51,13 @@
 | **Audio** | *Untested* |
 | **Camera** | *Untested* |
 | **WiFi** | ![](https://img.shields.io/badge/Works-success) |
-| **Bluetooth** | *Untested* |
+| **Bluetooth** | ![](https://img.shields.io/badge/Works-success) |
 | **GPS** | *Untested* |
 | **Calls** | *Untested* |
 | **SMS** | *Untested* |
 | **Mobile data**| *Untested* |
 | **FDE** | *Untested* |
-| **USB OTG** | ![](https://img.shields.io/badge/Works-success) |
+| **USB OTG** | *Untested* |
 | **Accelerometer** | *Untested* |
 ---
 
