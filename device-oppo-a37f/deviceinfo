@@ -18,6 +18,7 @@ deviceinfo_arch="aarch64"
 deviceinfo_gpu_depth_buffer_workaround="false"
 deviceinfo_drm="true"
 deviceinfo_getty="ttyMSM0;115200"
+deviceinfo_charge_lito="true"
 
 # Bootloader related
 # Flash lk2nd via TWRP (easiest method):
@@ -26,9 +27,7 @@ deviceinfo_getty="ttyMSM0;115200"
 # Alternative (if no TWRP): flash via EDL with emmcdl
 
 # extlinux (via lk2nd)
-deviceinfo_generate_extlinux_config_extlinux="true"
-deviceinfo_dtb_extlinux="qcom/msm8916-oppo-a37"
-deviceinfo_boot_filesystem_extlinux="ext2"
+
 
 # Partition layout
 # OPPO uses msdos partition table (not GPT)

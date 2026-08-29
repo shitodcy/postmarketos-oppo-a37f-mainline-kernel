@@ -1,0 +1,3 @@
+evdev:name:Synaptics s3203_ver5:*
+ EVDEV_ABS_01=0:1750:15
+ EVDEV_ABS_36=0:1750:15

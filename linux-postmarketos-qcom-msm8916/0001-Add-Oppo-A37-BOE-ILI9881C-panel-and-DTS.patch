@@ -132,6 +132,12 @@ index 000000000..225c2c6f2
 +		 * DUA entri msm_tlmm_irq bernama volume_up dan volume_down, keduanya
 +		 * dengan hitungan bukan nol. Jadi jangan diganti &pm8916_resin.
 +		 */
++		button-volume-up {
++			label = "Volume Up";
++			gpios = <&tlmm 107 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_VOLUMEUP>;
++		};
++
 +		button-volume-down {
 +			label = "Volume Down";
 +			gpios = <&tlmm 108 GPIO_ACTIVE_LOW>;
@@ -521,7 +527,7 @@ index 000000000..225c2c6f2
 +	vmmc-supply = <&reg_sd_vdd>;
 +	vqmmc-supply = <&pm8916_l12>;
 +
-+	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
++	broken-cd;
 +
 +	pinctrl-names = "default", "sleep";
 +	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;

@@ -4,29 +4,51 @@ maintainer="Azunya <azunya@example.com>"
 pkgname=device-oppo-a37f
 pkgdesc="Oppo A37 (A37f)"
 pkgver=1
-pkgrel=5
+pkgrel=11
 url="https://postmarketos.org"
 license="MIT"
 arch="aarch64"
 options="!check !archcheck"
-install="$pkgname.post-install"
 depends="
 	linux-postmarketos-qcom-msm8916
 	postmarketos-base
+	postmarketos-zram
 	soc-qcom-msm8916
+	soc-qcom-msm8916-rproc
+	qrtr
+	pd-mapper
+	tqftpserv
+	linux-firmware-qcom
+	firmware-oppo-a37f
+	msm-firmware-loader
+	alsa-ucm-conf
+	hwdata
 	openssh
 	neofetch
-	linux-firmware-qcom
+	htop
+	wlr-randr
 "
 makedepends="devicepkg-dev"
 source="
 	deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
-	usb-network-fix.initd
-	disable-random-mac.conf
+	mac.conf
+	90-touchscreen.rules
+	90-bq24190-battery.rules
+	hide-bq24190.sh
+	99-touchscreen-crop.hwdb
+	99-usb-network.sh
+	60-sensor.hwdb
+	wpa_supplicant.conf
+	disable-pmf.conf
+	dhcp.conf
+	90-backlight.rules
+	phoc.ini
+	phoc-scale.desktop
+	machine-info
+	99-zram.conf
 "
-subpackages="$pkgname-kernel-lk2nd:kernel_lk2nd"
 
 build() {
 	devicepkg_build $startdir $pkgname
@@ -34,25 +56,55 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
-	install -Dm755 "$srcdir"/usb-network-fix.initd "$pkgdir"/etc/init.d/usb-network-fix
-	install -Dm644 "$srcdir"/disable-random-mac.conf "$pkgdir"/etc/NetworkManager/conf.d/disable-random-mac.conf
-}
-
-kernel_lk2nd() {
-	pkgdesc="Boot via lk2nd using extlinux.conf (appended DTB)"
-	# Flash lk2nd via TWRP:
-	#   TWRP > Install > Install Image > lk2nd-a37f-adtb.img > Boot partition
-	# lk2nd image: https://github.com/rigaz29/android_build_oppo_A37-mainline/releases
-	# lk2nd built with: LK2ND_ADTBS="msm8916-mtp.dtb" LK2ND_QCDTBS=
-	# board-id: <8 0 15399> (three-cell, must use appended DTB not QCDT)
-	depends="linux-postmarketos-qcom-msm8916"
-	devicepkg_subpackage_kernel $startdir $pkgname $subpkgname
+	install -Dm644 "$srcdir"/mac.conf \
+		"$pkgdir"/etc/NetworkManager/conf.d/mac.conf
+	install -Dm644 "$srcdir"/disable-pmf.conf \
+		"$pkgdir"/etc/NetworkManager/conf.d/disable-pmf.conf
+	install -Dm644 "$srcdir"/dhcp.conf \
+		"$pkgdir"/etc/NetworkManager/conf.d/dhcp.conf
+	install -Dm644 "$srcdir"/phoc.ini \
+		"$pkgdir"/etc/phosh/phoc.ini
+	install -Dm644 "$srcdir"/phoc-scale.desktop \
+		"$pkgdir"/etc/xdg/autostart/phoc-scale.desktop
+	install -Dm644 "$srcdir"/machine-info \
+		"$pkgdir"/etc/machine-info
+	install -Dm644 "$srcdir"/wpa_supplicant.conf \
+		"$pkgdir"/etc/wpa_supplicant/wpa_supplicant.conf
+	install -Dm644 "$srcdir"/90-touchscreen.rules \
+		"$pkgdir"/etc/udev/rules.d/90-touchscreen.rules
+	install -Dm644 "$srcdir"/60-sensor.hwdb \
+		"$pkgdir"/etc/udev/hwdb.d/60-sensor.hwdb
+	install -Dm644 "$srcdir"/90-backlight.rules \
+		"$pkgdir"/etc/udev/rules.d/90-backlight.rules
+	install -Dm644 "$srcdir"/90-bq24190-battery.rules \
+		"$pkgdir"/etc/udev/rules.d/90-bq24190-battery.rules
+	install -Dm755 "$srcdir"/hide-bq24190.sh \
+		"$pkgdir"/usr/sbin/hide-bq24190.sh
+	install -Dm644 "$srcdir"/99-touchscreen-crop.hwdb \
+		"$pkgdir"/etc/udev/hwdb.d/99-touchscreen-crop.hwdb
+	install -Dm644 "$srcdir"/99-usb-network.sh \
+		"$pkgdir"/etc/NetworkManager/dispatcher.d/99-usb-network.sh
+	install -Dm644 "$srcdir"/99-zram.conf \
+		"$pkgdir"/etc/sysctl.d/99-zram.conf
 }
 
 sha512sums="
-f0079a40d711934f5b75f635f1a969252aef5898f65966192b036b69cd90d73d85457990de748cbd1563fb79ca978ba40b4df7aedc7ba505f8f46c485f986d23  deviceinfo
-acb1470d13cded054eedf6308ed035cddcfcbe88f421e394937ef88c81df401a28e4dfd8831d606050a615396522857679b986468c511c3f00668116c7ff338b  kernel-cmdline.conf
+665c9aba1e47c6ee8e23661a1badef68f3713216fff1381ab30b779959d2d1f8c8286921c9d8bf4108dcd33fd58e5d0f486a04b91cd02587458297ff4f78d35b  deviceinfo
+bb8b0e069199657ff0ef1763c699c342404c452ff946b1934a94d77f7c7cbf588f98142172e57479013bb65138373d715b84ba436632c7e124cc91352a60cc68  kernel-cmdline.conf
 5e570ee0f9262ff711484117f348197cb6318bd72e7bc14b089156610414228b075ddd526683fe789f55c661c29b758269abc244cefb0dae24396fa1ab1fc2c1  modules-initfs
-a106e6a747b26062c467acb45dc5f1ce4bc9d2e5d0843df18145425e35fe012a815dbfb08db551bc0482136862f6b60f103a982fcc20e6a7b3a5ca3b4ea764d2  usb-network-fix.initd
-101ea2238dd9c3e7c8597022e113fa29f9df93387dd1755e3e4d7df9c9571a271f71a390c0b96c5dade36f754bdd41a759555a2ad31cb3423ee74dd342d0909c  disable-random-mac.conf
+b8ca46fcc9ab1ac9685ad7d23d570f1a58a7c0231ef3a4027a63e9a4f62af2902b52c7f724d1a5f919f6c3b20122cd53f93ead7eb931da5945e59cea437ef31d  mac.conf
+6fa64ea8ffae3211c72362875e18a0852e93f464fd38bdcde60b52af5af94c5a8851cc9aa3d23a26be3343077861cb7499061c487be5b5bffb5f8de25e6e4caf  90-touchscreen.rules
+58020186e406a448a448ba20bd4e215258c2075090860aa6d391aa8e008df893d443c396491efb4f134b9a75d18103b78354a51ef4366954b4d6377f89a40428  90-bq24190-battery.rules
+0fb2458382fef9654c058b62a7735ecbe4624360032de24f366b6246b745f35b25e83aa28648d6e2fbcd33ea326907a9fd29f100c1fdc7a7648d36288618acd7  hide-bq24190.sh
+33285823519d0170174dc493c23df084f1cbdb92cfd6ced9570b4a60c3bc6ebd77d75d5e8373285dd5b6661d6bdf41ef1128549eeb0f5803b04ac050727549f9  99-touchscreen-crop.hwdb
+1c06bac882aa917b5b57271d9b86364fca5390a08ede34695f75e782602c6413744dab09bdb2591db4e7b92eaa3187b6d0d17e707555b16d05e215ab9671dfd2  99-usb-network.sh
+5ac54ec26be0ba83f012da570bb332a35b71ee707e53dfbfcde6f503434b88d8d839298530631914bc1e1b5a29d656939e1b5b91b1621cb487f6bbf539d0416e  60-sensor.hwdb
+feef6fb847cc95b3f19f6eee21e69564c7f777f5a795ca546a49db0cf430915247660edf579d955ab427362e0c45d27f1781c4c39707430712c14a11e9a00ba1  wpa_supplicant.conf
+38af0fdf86b95ceede954ce4300094d6600be8e762af294e50004f056cde43c21a3329fd91edc22b52d634851ed403160ef7b0f8a1465d331a06fe80acc77da5  disable-pmf.conf
+0f79016bf717dea43830962f524deae8d1cedc274376e40bd912ebe63208c5b1c3b7a5aa14379da19020c587dbd5588df2f0066ca1540070a226983a43e4159b  dhcp.conf
+e665ca23079051904cd7e336ee9cc3f8b426cddbed34f2b7850347a7dfb198cf2d88cf600ff6d8fdf17e99bb21d53d79a5876499816307ec18dda0b7e67b07a0  90-backlight.rules
+258ed4929ccfeee70777651648ad504038ef4261479e29c43f0a3b4aeccddfde34d0d2b06a2b41e545fbd108aa4aed7c7d32930089bd3540b6ede14d480d8aae  phoc.ini
+a8c278fdc8e532d56a57b387c39c15bea73dfe24d94fc4ec4917a6d08169ddd03d8ce03ac3c2e8c00069a276a622af0989d65f087ed114565e0067ae00c14db5  phoc-scale.desktop
+ce45e20e4022d26f239708d92d2045ab7d11fcbf9d609502ae49d493efb55d15a02faa43c07d1c9db1f191828dc78b99e0d0f9a1a3ceb6a762226b8c462ccc81  machine-info
+abb8c0fdb17b9061a993c407cf95707d34adff2bdde63376e77f64b0280a6fc2b0006c005da787a63eed7f44e53a9411e7b79b5fbc629de43476316923003de7  99-zram.conf
 "

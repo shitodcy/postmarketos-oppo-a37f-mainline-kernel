@@ -1,0 +1,8 @@
+# Udev rule for OPPO A37 touchscreen
+# Adjust LIBINPUT_CALIBRATION_MATRIX as needed:
+# - Inverted X and Y: ENV{LIBINPUT_CALIBRATION_MATRIX}="-1 0 1 0 -1 1"
+# - Swapped X and Y: ENV{LIBINPUT_CALIBRATION_MATRIX}="0 1 0 1 0 0"
+# - Inverted X, Swapped X and Y: ENV{LIBINPUT_CALIBRATION_MATRIX}="0 -1 1 1 0 0"
+# - Inverted Y, Swapped X and Y: ENV{LIBINPUT_CALIBRATION_MATRIX}="0 1 0 -1 0 1"
+# Defaulting to Inverted X and Y as it's the most common for MSM8916 mainline without DT fixes:
+ACTION=="add|change", KERNEL=="event[0-9]*", ENV{ID_INPUT_TOUCHSCREEN}=="1", ENV{LIBINPUT_CALIBRATION_MATRIX}="1 0 0 0 1 0"

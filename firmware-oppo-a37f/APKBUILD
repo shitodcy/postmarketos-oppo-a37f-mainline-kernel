@@ -1,0 +1,21 @@
+# Reference: <https://postmarketos.org/devicepkg>
+# Maintainer: Azunya <azunya@example.com>
+pkgname=firmware-oppo-a37f
+pkgdesc="Firmware for Oppo A37f"
+pkgver=1
+pkgrel=0
+url="https://postmarketos.org"
+license="proprietary"
+arch="aarch64"
+options="!check !strip !archcheck !tracedeps pmb:cross-native"
+
+source=""
+
+build() {
+	return 0
+}
+
+package() {
+	mkdir -p "$pkgdir"/lib/firmware/
+	cp -r "$startdir"/wlan "$pkgdir"/lib/firmware/
+}

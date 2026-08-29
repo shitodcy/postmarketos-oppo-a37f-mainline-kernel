@@ -1,0 +1,2 @@
+ACTION=="add|change", SUBSYSTEM=="power_supply", KERNEL=="bq24190-charger", ENV{UPower}="0", ENV{UPOWER_IGNORE}="1"
+ACTION=="add|change", SUBSYSTEM=="power_supply", KERNEL=="bq24190-battery", RUN+="/usr/sbin/hide-bq24190.sh"
