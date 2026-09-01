@@ -48,17 +48,17 @@
 | **Screen** | ![](https://img.shields.io/badge/Works-success) |
 | **Touchscreen**| ![](https://img.shields.io/badge/Works-success) |
 | **3D Acceleration**| *Untested* |
-| **Audio** | *Untested* |
+| **Audio** | ![](https://img.shields.io/badge/Partial-orange) |
 | **Camera** | *Untested* |
 | **WiFi** | ![](https://img.shields.io/badge/Works-success) |
 | **Bluetooth** | ![](https://img.shields.io/badge/Works-success) |
 | **GPS** | *Untested* |
 | **Calls** | *Untested* |
 | **SMS** | *Untested* |
-| **Mobile data**| *Untested* |
+| **Mobile data**| ![](https://img.shields.io/badge/Partial-orange) |
 | **FDE** | *Untested* |
 | **USB OTG** | ![](https://img.shields.io/badge/Works-success) |
-| **Accelerometer** | *Untested* |
+| **Accelerometer** | ![](https://img.shields.io/badge/Works-success) |
 ---
 
 # postmarketOS on OPPO A37f (MSM8916)
