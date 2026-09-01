@@ -57,7 +57,7 @@
 | **SMS** | *Untested* |
 | **Mobile data**| *Untested* |
 | **FDE** | *Untested* |
-| **USB OTG** | *Untested* |
+| **USB OTG** | ![](https://img.shields.io/badge/Works-success) |
 | **Accelerometer** | *Untested* |
 ---
 
