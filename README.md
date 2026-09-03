@@ -49,7 +49,7 @@
 | **Touchscreen**| ![](https://img.shields.io/badge/Works-success) |
 | **3D Acceleration**| *Untested* |
 | **Audio** | ![](https://img.shields.io/badge/Works-success) |
-| **Camera** | *Untested* |
+| **Camera** | ![](https://img.shields.io/badge/Partial-orange) |
 | **WiFi** | ![](https://img.shields.io/badge/Works-success) |
 | **Bluetooth** | ![](https://img.shields.io/badge/Works-success) |
 | **GPS** | *Untested* |
