@@ -48,7 +48,7 @@
 | **Screen** | ![](https://img.shields.io/badge/Works-success) |
 | **Touchscreen**| ![](https://img.shields.io/badge/Works-success) |
 | **3D Acceleration**| *Untested* |
-| **Audio** | ![](https://img.shields.io/badge/Partial-orange) |
+| **Audio** | ![](https://img.shields.io/badge/Works-success) |
 | **Camera** | *Untested* |
 | **WiFi** | ![](https://img.shields.io/badge/Works-success) |
 | **Bluetooth** | ![](https://img.shields.io/badge/Works-success) |
