@@ -54,8 +54,8 @@
 | **Bluetooth** | ![](https://img.shields.io/badge/Works-success) |
 | **GPS** | *Untested* |
 | **Calls** | *Untested* |
-| **SMS** | *Untested* |
-| **Mobile data**| ![](https://img.shields.io/badge/Partial-orange) |
+| **SMS** | ![](https://img.shields.io/badge/Works-success) |
+| **Mobile data**| ![](https://img.shields.io/badge/Works-success) |
 | **FDE** | *Untested* |
 | **USB OTG** | ![](https://img.shields.io/badge/Works-success) |
 | **Accelerometer** | ![](https://img.shields.io/badge/Works-success) |
