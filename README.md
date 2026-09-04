@@ -135,7 +135,8 @@ We have provided a fully automated TWRP installer zip that handles the complex f
    In TWRP, you must overwrite the `userdata` partition with the postmarketOS root filesystem.
    Using ADB shell (or TWRP terminal):
    ```bash
-   adb shell "dd if=/sdcard/pmOS_root.img of=/dev/block/bootdevice/by-name/userdata bs=4096"
+   adb push pmos-oppo-a37f-installer.zip /sdcard
+   cat pmOS_root.img | adb shell "dd of=/dev/block/bootdevice/by-name/userdata bs=1048576"
    adb shell twrp install /sdcard/pmos-oppo-a37f-installer.zip
    ```
 
