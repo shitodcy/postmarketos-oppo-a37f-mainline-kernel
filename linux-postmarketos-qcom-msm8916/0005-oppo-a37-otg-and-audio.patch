@@ -1,0 +1,68 @@
+--- a/arch/arm64/boot/dts/qcom/msm8916-oppo-a37.dts	2026-09-01 14:27:52.096405520 +0700
++++ b/arch/arm64/boot/dts/qcom/msm8916-oppo-a37.dts	2026-09-01 14:28:25.584169954 +0700
+@@ -682,3 +682,65 @@
+ 		bias-disable;
+ 	};
+ };
++
++/ {
++	spk_boost: spk-boost-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "spk_boost";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		gpio = <&tlmm 118 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
++	spk_pa: audio-amplifier {
++		compatible = "simple-audio-amplifier";
++		enable-gpios = <&tlmm 120 GPIO_ACTIVE_HIGH>;
++		VCC-supply = <&spk_boost>;
++		sound-name-prefix = "Speaker Amp";
++	};
++
++	usb_extcon: usb-extcon {
++		compatible = "linux,extcon-usb-gpio";
++		vbus-gpios = <&pm8916_gpios 2 GPIO_ACTIVE_LOW>;
++	};
++};
++
++&lpass {
++	status = "okay";
++};
++
++&pm8916_codec {
++	status = "okay";
++};
++
++&sound {
++	status = "okay";
++	model = "oppo-a37";
++	audio-routing =
++		"AMIC1", "MIC BIAS Internal1",
++		"AMIC2", "MIC BIAS Internal2",
++		"AMIC3", "MIC BIAS Internal3",
++		"Speaker", "Speaker Amp OUT";
++	aux-devs = <&spk_pa>;
++};
++
++&pm8916_l8 {
++	regulator-always-on;
++	regulator-boot-on;
++};
++
++&pm8916_l9 {
++	regulator-always-on;
++	regulator-boot-on;
++};
++
++&usb {
++	status = "okay";
++	dr_mode = "otg";
++	extcon = <&usb_extcon>;
++};
++
++&usb_hs_phy {
++	extcon = <&usb_extcon>;
++};

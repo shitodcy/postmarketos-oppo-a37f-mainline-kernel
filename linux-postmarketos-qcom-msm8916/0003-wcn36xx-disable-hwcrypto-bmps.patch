@@ -1,0 +1,24 @@
+--- a/drivers/net/wireless/ath/wcn36xx/main.c	2026-08-30 14:58:24.928332441 +0700
++++ b/drivers/net/wireless/ath/wcn36xx/main.c	2026-08-30 14:58:24.932319274 +0700
+@@ -312,8 +312,8 @@
+ 	list_for_each_entry(tmp, &wcn->vif_list, list) {
+ 		vif = wcn36xx_priv_to_vif(tmp);
+ 		if (enable && !wcn->sw_scan) {
+-			if (vif->cfg.ps) /* ps allowed ? */
+-				wcn36xx_pmc_enter_bmps_state(wcn, vif);
++			//if (vif->cfg.ps)
++				//wcn36xx_pmc_enter_bmps_state(wcn, vif);
+ 		} else {
+ 			wcn36xx_pmc_exit_bmps_state(wcn, vif);
+ 		}
+@@ -1446,8 +1446,8 @@
+ 	wcn->hw->wiphy->max_scan_ssids = WCN36XX_MAX_SCAN_SSIDS;
+ 	wcn->hw->wiphy->max_scan_ie_len = WCN36XX_MAX_SCAN_IE_LEN;
+ 
+-	wcn->hw->wiphy->cipher_suites = cipher_suites;
+-	wcn->hw->wiphy->n_cipher_suites = ARRAY_SIZE(cipher_suites);
++	//wcn->hw->wiphy->cipher_suites = cipher_suites;
++	//wcn->hw->wiphy->n_cipher_suites = ARRAY_SIZE(cipher_suites);
+ 
+ #ifdef CONFIG_PM
+ 	wcn->hw->wiphy->wowlan = &wowlan_support;

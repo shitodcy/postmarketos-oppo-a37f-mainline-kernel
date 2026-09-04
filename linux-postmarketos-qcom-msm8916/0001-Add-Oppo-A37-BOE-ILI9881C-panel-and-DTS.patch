@@ -84,7 +84,7 @@ index 000000000..225c2c6f2
 +
 +	dummy_extcon: dummy_extcon {
 +		compatible = "extcon-usb-gpio";
-+		vbus-gpio = <&msmgpio 107 (GPIO_ACTIVE_HIGH)>;
++		vbus-gpio = <&tlmm 107 (GPIO_ACTIVE_HIGH)>;
 +	};
 +
 +	/*
@@ -230,8 +230,8 @@ index 000000000..225c2c6f2
 +		compatible = "st,lis3dh-accel";
 +		reg = <0x19>;
 +
-+		vdd-supply = <&pm8916_l17>;
-+		vddio-supply = <&pm8916_l6>;
++		vdd-supply = <&l17>;
++		vddio-supply = <&l6>;
 +
 +		/*
 +		 * Diturunkan dari st,axis-map-* di DTS downstream:
@@ -273,8 +273,8 @@ index 000000000..225c2c6f2
 +	 * magnetometer@30 {
 +	 *	compatible = "memsic,mmc3416x";
 +	 *	reg = <0x30>;
-+	 *	vdd-supply = <&pm8916_l17>;
-+	 *	vddio-supply = <&pm8916_l6>;
++	 *	vdd-supply = <&l17>;
++	 *	vddio-supply = <&l6>;
 +	 * };
 +	 *
 +	 * Avago/Broadcom APDS9921, ALS + proximity, IRQ di GPIO 113.
@@ -285,8 +285,8 @@ index 000000000..225c2c6f2
 +	 *	reg = <0x53>;
 +	 *	interrupt-parent = <&tlmm>;
 +	 *	interrupts = <113 IRQ_TYPE_EDGE_FALLING>;
-+	 *	vdd-supply = <&pm8916_l17>;
-+	 *	vddio-supply = <&pm8916_l6>;
++	 *	vdd-supply = <&l17>;
++	 *	vddio-supply = <&l6>;
 +	 * };
 +	 */
 +};
@@ -352,8 +352,8 @@ index 000000000..225c2c6f2
 +		interrupt-parent = <&tlmm>;
 +		interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
 +
-+		vdd-supply = <&pm8916_l17>;
-+		vio-supply = <&pm8916_l6>;
++		vdd-supply = <&l17>;
++		vio-supply = <&l6>;
 +
 +		pinctrl-names = "default";
 +		pinctrl-0 = <&tp_int_default>;
@@ -408,9 +408,7 @@ index 000000000..225c2c6f2
 +
 +&blsp_uart2 {
 +	status = "okay";
-+	pinctrl-0 = <&blsp_uart2_console_default>;
-+	pinctrl-1 = <&blsp_uart2_console_sleep>;
-+	pinctrl-names = "default", "sleep";
++	pinctrl-names = "default";
 +};
 +
 +&gpu {
@@ -422,7 +420,7 @@ index 000000000..225c2c6f2
 +};
 +
 +&mdss_dsi0 {
-+	pinctrl-names = "default", "sleep";
++	pinctrl-names = "default";
 +	pinctrl-0 = <&mdss_default>;
 +	pinctrl-1 = <&mdss_sleep>;
 +
@@ -503,7 +501,35 @@ index 000000000..225c2c6f2
 +};
 +
 +&pm8916_rpm_regulators {
-+	pm8916_l17: l17 {
++	l8: l8 {
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <2950000>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	l9: l9 {
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <2950000>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	pm8916_l14: l14 {
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <2950000>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	pm8916_l15: l15 {
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <2950000>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	l17: l17 {
 +		regulator-min-microvolt = <2850000>;
 +		regulator-max-microvolt = <2850000>;
 +	};
@@ -529,7 +555,7 @@ index 000000000..225c2c6f2
 +
 +	broken-cd;
 +
-+	pinctrl-names = "default", "sleep";
++	pinctrl-names = "default";
 +	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
 +	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
 +};

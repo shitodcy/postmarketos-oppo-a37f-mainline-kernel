@@ -8,7 +8,26 @@ ui_print() {
 }
 
 ui_print "****************************************"
-ui_print " OPPO A37f (MSM8916) postmarketOS Setup "
+ui_print "                 /\\ "
+ui_print "                /  \\ "
+ui_print "               /    \\ "
+ui_print "              /      \\ "
+ui_print "             /        \\ "
+ui_print "            /          \\ "
+ui_print "            \\           \\ "
+ui_print "          /\\ \\____       \\ "
+ui_print "         /  \\____ \\       \\ "
+ui_print "        /       /  \\       \\ "
+ui_print "       /       /    \\    ___\\ "
+ui_print "      /       /      \\  / ____"
+ui_print "     /       /        \\/ /    \\ "
+ui_print "    /       / __________/      \\ "
+ui_print "   /        \\ \\                 \\ "
+ui_print "  /          \\ \\                 \\ "
+ui_print " /           / /                  \\ "
+ui_print "/___________/ /____________________\\ "
+ui_print "****************************************"
+ui_print "   OPPO A37f (MSM8916) Installer        "
 ui_print "****************************************"
 ui_print ""
 ui_print "- Extracting files..."
@@ -42,7 +61,28 @@ else
 fi
 
 umount /tmp/pmos_boot_mnt
-rm -rf /tmp/pmos_install /tmp/pmos_boot_mnt
+
+ui_print "- Applying audio configuration & hardware tweaks..."
+mkdir -p /tmp/pmos_root_mnt
+if mount -t ext4 /dev/block/bootdevice/by-name/userdata /tmp/pmos_root_mnt 2>/dev/null; then
+    if [ -d /tmp/pmos_root_mnt/usr/share/alsa/ucm2/oppo-a51f ]; then
+        cp /tmp/pmos_install/HiFi.conf /tmp/pmos_root_mnt/usr/share/alsa/ucm2/oppo-a51f/HiFi.conf 2>/dev/null
+        ln -sf /usr/share/alsa/ucm2/oppo-a51f /tmp/pmos_root_mnt/usr/share/alsa/ucm2/oppoa51f 2>/dev/null
+        ui_print "  -> Audio UCM profile applied!"
+    fi
+
+    if [ -f /tmp/pmos_install/cpuinfo ]; then
+        ui_print "- Applying CPU detection fix (Snapdragon 410)..."
+        cp /tmp/pmos_install/cpuinfo /tmp/pmos_root_mnt/etc/cpuinfo
+        chmod 644 /tmp/pmos_root_mnt/etc/cpuinfo
+        if ! grep -q "/etc/cpuinfo" /tmp/pmos_root_mnt/etc/fstab 2>/dev/null; then
+            echo "/etc/cpuinfo /proc/cpuinfo none bind 0 0" >> /tmp/pmos_root_mnt/etc/fstab
+            ui_print "  -> Added CPU info bind-mount to /etc/fstab"
+        fi
+    fi
+    umount /tmp/pmos_root_mnt
+fi
+rm -rf /tmp/pmos_root_mnt /tmp/pmos_install /tmp/pmos_boot_mnt
 
 ui_print ""
 ui_print "****************************************"

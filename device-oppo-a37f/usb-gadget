@@ -1,0 +1,32 @@
+#!/sbin/openrc-run
+# OpenRC init script for USB gadget networking on OPPO A37f
+# This ensures USB gadget is configured after boot so the device
+# is visible on the host PC for SSH access and file transfer.
+
+name="USB Gadget Network"
+description="Setup USB gadget networking (RNDIS) for SSH/file transfer"
+command="/usr/bin/setup-usb-gadget.sh"
+command_args="start"
+
+depend() {
+    need localmount
+    after modules hwdrivers
+    before sshd networking
+    provide usb-gadget
+}
+
+start() {
+    ebegin "Setting up USB gadget network"
+    /usr/bin/setup-usb-gadget.sh start
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping USB gadget network"
+    /usr/bin/setup-usb-gadget.sh stop
+    eend $?
+}
+
+status() {
+    /usr/bin/setup-usb-gadget.sh status
+}

@@ -1,4 +1,8 @@
 #!/bin/sh
-# Enable the custom USB gadget network fix
-rc-update add usb-network-fix default
+# Enable the custom USB gadget network
+rc-update add usb-gadget default
+# Enable modem & UIM slot selection
+rc-update add msm-modem-uim-selection default
+rc-update add rmtfs default
+sed -i 's|codecs/msm8916-wcd/Speaker.conf|codecs/msm8916-wcd/SpeakerHPHL.conf|g' /usr/share/alsa/ucm2/msm8916/HiFi.conf
 exit 0

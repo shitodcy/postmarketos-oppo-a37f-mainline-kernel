@@ -400,8 +400,8 @@ index e69de29..225c2c6 100644
 +
 +&blsp_uart2 {
 +	status = "okay";
-+	pinctrl-0 = <&blsp_uart2_console_default>;
-+	pinctrl-1 = <&blsp_uart2_console_sleep>;
++	pinctrl-0 = <&blsp_uart2_default>;
++	pinctrl-1 = <&blsp_uart2_sleep>;
 +	pinctrl-names = "default", "sleep";
 +};
 +

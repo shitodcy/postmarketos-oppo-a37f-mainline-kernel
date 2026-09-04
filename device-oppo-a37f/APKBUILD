@@ -27,9 +27,16 @@ depends="
 	neofetch
 	htop
 	wlr-randr
+	plymouth
+	plymouth-drm
+	plymouth-openrc-plugin
+	postmarketos-plymouth-themes
 "
 makedepends="devicepkg-dev"
 source="
+	audio.conf
+	usb-gadget
+	setup-usb-gadget.sh
 	deviceinfo
 	kernel-cmdline.conf
 	modules-initfs
@@ -48,6 +55,8 @@ source="
 	phoc-scale.desktop
 	machine-info
 	99-zram.conf
+	wcn36xx.conf
+	70-wifi-mac.conf
 "
 
 build() {
@@ -56,6 +65,9 @@ build() {
 
 package() {
 	devicepkg_package $startdir $pkgname
+	install -Dm644 "$srcdir"/audio.conf \
+		"$pkgdir"/etc/modules-load.d/audio.conf
+	mkdir -p "$pkgdir"/usr/share/alsa/ucm2/conf.virt.d
 	install -Dm644 "$srcdir"/mac.conf \
 		"$pkgdir"/etc/NetworkManager/conf.d/mac.conf
 	install -Dm644 "$srcdir"/disable-pmf.conf \
@@ -86,11 +98,21 @@ package() {
 		"$pkgdir"/etc/NetworkManager/dispatcher.d/99-usb-network.sh
 	install -Dm644 "$srcdir"/99-zram.conf \
 		"$pkgdir"/etc/sysctl.d/99-zram.conf
+	install -Dm644 "$srcdir"/wcn36xx.conf \
+		"$pkgdir"/etc/modprobe.d/wcn36xx.conf
+	install -Dm644 "$srcdir"/70-wifi-mac.conf \
+		"$pkgdir"/etc/NetworkManager/conf.d/70-wifi-mac.conf
+	install -Dm755 "$srcdir"/usb-gadget \
+		"$pkgdir"/etc/init.d/usb-gadget
+	install -Dm755 "$srcdir"/setup-usb-gadget.sh \
+		"$pkgdir"/usr/bin/setup-usb-gadget.sh
 }
-
 sha512sums="
-665c9aba1e47c6ee8e23661a1badef68f3713216fff1381ab30b779959d2d1f8c8286921c9d8bf4108dcd33fd58e5d0f486a04b91cd02587458297ff4f78d35b  deviceinfo
-bb8b0e069199657ff0ef1763c699c342404c452ff946b1934a94d77f7c7cbf588f98142172e57479013bb65138373d715b84ba436632c7e124cc91352a60cc68  kernel-cmdline.conf
+d6f7406dcd0e38587b0a910a4529d470b8bed4e738523e8fee3981fde638acd7100d07b13931c42d4d0ce9402954c34bcda1283f470352f6d142c19efd2b8c93  audio.conf
+416794f08ab343a908fc36012997f76575209b510cce6ee36ddfe4b169866ace71a0c6e36dd8cc0dd457e91dc20d3d62887b9b000b4cb6395b85d1c21f5b42b3  usb-gadget
+5111980aa45e92b9de03689fc22e241578d8279be71b14a2fcd886a4e379090d04996543af6174d5b84fb4e02620c5327ec0644a68b5058a1a247138bd372375  setup-usb-gadget.sh
+f495097bc439340788a0b342a8d814188679d3ad41fab0de4cd63903ef556f2282a89709e52a8272bc7e238dbef5cc4407119f74bc0b0553d888e6c13ae8c1ac  deviceinfo
+fd6d0f5139ed255cc38ccc24c94de89ba19a25f53172c478bff5294e2bf209202eea7c867f83c3241d46a5b50038268ece54d3cd82a1a36593de5fc766b45b9a  kernel-cmdline.conf
 5e570ee0f9262ff711484117f348197cb6318bd72e7bc14b089156610414228b075ddd526683fe789f55c661c29b758269abc244cefb0dae24396fa1ab1fc2c1  modules-initfs
 b8ca46fcc9ab1ac9685ad7d23d570f1a58a7c0231ef3a4027a63e9a4f62af2902b52c7f724d1a5f919f6c3b20122cd53f93ead7eb931da5945e59cea437ef31d  mac.conf
 6fa64ea8ffae3211c72362875e18a0852e93f464fd38bdcde60b52af5af94c5a8851cc9aa3d23a26be3343077861cb7499061c487be5b5bffb5f8de25e6e4caf  90-touchscreen.rules
@@ -107,4 +129,6 @@ e665ca23079051904cd7e336ee9cc3f8b426cddbed34f2b7850347a7dfb198cf2d88cf600ff6d8fd
 a8c278fdc8e532d56a57b387c39c15bea73dfe24d94fc4ec4917a6d08169ddd03d8ce03ac3c2e8c00069a276a622af0989d65f087ed114565e0067ae00c14db5  phoc-scale.desktop
 ce45e20e4022d26f239708d92d2045ab7d11fcbf9d609502ae49d493efb55d15a02faa43c07d1c9db1f191828dc78b99e0d0f9a1a3ceb6a762226b8c462ccc81  machine-info
 abb8c0fdb17b9061a993c407cf95707d34adff2bdde63376e77f64b0280a6fc2b0006c005da787a63eed7f44e53a9411e7b79b5fbc629de43476316923003de7  99-zram.conf
+56dd7772f8835d9e1e8cf847c304710f53397fa6fcda3310623c3d3f6a26517a60181ddd883e41799f82f3ed09f457bd89bb5d011121f90b834d5894e2cb4f03  wcn36xx.conf
+3133513c151d4d7d0126e9e9083af8ed1cda15b3d368c1d3177c00c3be899ed9ae121c6db9dd0e87d6997cb9abd9f8a45d469b091b623102abe71d0148780364  70-wifi-mac.conf
 "

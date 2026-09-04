@@ -1,0 +1,39 @@
+processor	: 0
+model name	: Qualcomm Snapdragon 410 (MSM8916)
+BogoMIPS	: 38.40
+Features	: fp asimd evtstrm cpuid
+CPU implementer	: 0x41
+CPU architecture: 8
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4
+
+processor	: 1
+model name	: Qualcomm Snapdragon 410 (MSM8916)
+BogoMIPS	: 38.40
+Features	: fp asimd evtstrm cpuid
+CPU implementer	: 0x41
+CPU architecture: 8
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4
+
+processor	: 2
+model name	: Qualcomm Snapdragon 410 (MSM8916)
+BogoMIPS	: 38.40
+Features	: fp asimd evtstrm cpuid
+CPU implementer	: 0x41
+CPU architecture: 8
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4
+
+processor	: 3
+model name	: Qualcomm Snapdragon 410 (MSM8916)
+BogoMIPS	: 38.40
+Features	: fp asimd evtstrm cpuid
+CPU implementer	: 0x41
+CPU architecture: 8
+CPU variant	: 0x0
+CPU part	: 0xd03
+CPU revision	: 4

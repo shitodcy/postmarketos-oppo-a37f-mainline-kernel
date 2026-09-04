@@ -1,0 +1,1 @@
+SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="/sbin/ip link set dev %k address A8:1B:5A:84:82:03"
