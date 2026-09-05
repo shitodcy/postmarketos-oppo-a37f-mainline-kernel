@@ -47,7 +47,6 @@
 | **Battery** | ![](https://img.shields.io/badge/Works-success) |
 | **Screen** | ![](https://img.shields.io/badge/Works-success) |
 | **Touchscreen**| ![](https://img.shields.io/badge/Works-success) |
-| **3D Acceleration**| *Untested* |
 | **Audio** | ![](https://img.shields.io/badge/Works-success) |
 | **Camera** | *Broken* |
 | **WiFi** | ![](https://img.shields.io/badge/Partial-orange) |
