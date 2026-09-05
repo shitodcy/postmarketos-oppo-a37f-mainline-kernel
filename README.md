@@ -6,7 +6,7 @@
 
 <div align="center">
   <img src="https://github.com/shitodcy/pmos/blob/main/assets/neofetch.jpeg" width="350" alt="postmarketOS booting on OPPO A37f">
-  <p><i>Neofetch</i></p>
+  <img src="https://github.com/shitodcy/pmos/blob/main/assets/phosh.png" width="350" alt="postmarketOS booting on OPPO A37f">
 </div>
 
 ##  Device Specifications: Oppo A37
