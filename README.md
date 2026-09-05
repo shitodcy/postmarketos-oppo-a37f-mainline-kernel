@@ -5,8 +5,18 @@
 > **Status:** *booting*
 
 <div align="center">
-  <img src="https://github.com/shitodcy/pmos/blob/main/assets/neofetch.jpeg" width="350" alt="postmarketOS booting on OPPO A37f">
-  <img src="https://github.com/shitodcy/pmos/blob/main/assets/phosh.png" width="350" alt="postmarketOS booting on OPPO A37f">
+  <table>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/shitodcy/pmos/blob/main/assets/neofetch.jpeg" width="350" alt="postmarketOS booting on OPPO A37f">
+      <p>TTY</p>
+    </td>
+    <td align="center">
+      <img src="https://github.com/shitodcy/pmos/blob/main/assets/phosh.png" width="350" alt="postmarketOS booting on OPPO A37f">
+      <p>Phosh</p>
+    </td>
+  </tr>
+</table>
 </div>
 
 ##  Device Specifications: Oppo A37
