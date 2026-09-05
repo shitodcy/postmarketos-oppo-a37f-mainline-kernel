@@ -50,7 +50,7 @@
 | **3D Acceleration**| *Untested* |
 | **Audio** | ![](https://img.shields.io/badge/Works-success) |
 | **Camera** | ![](https://img.shields.io/badge/Partial-orange) |
-| **WiFi** | ![](https://img.shields.io/badge/Works-success) |
+| **WiFi** | ![](https://img.shields.io/badge/Partial-orange) |
 | **Bluetooth** | ![](https://img.shields.io/badge/Works-success) |
 | **GPS** | *Untested* |
 | **Calls** | *Untested* |
