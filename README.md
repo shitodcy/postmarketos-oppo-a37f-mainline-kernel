@@ -77,50 +77,6 @@
 
 This repository contains the working bootloader (`lk2nd`), kernel files, and a TWRP-flashable installer to successfully boot postmarketOS on the OPPO A37f (Snapdragon 410 / MSM8916).
 
-## The Journey & Technical Findings
-
-Porting postmarketOS to the OPPO A37f was challenging due to several strict security measures and firmware quirks:
-
-1. **Bootloader Signature Verification (`aboot`)**:
-   OPPO enforces signature verification on the `boot` partition. Normally, this rejects any non-stock kernel. However, by using a specialized build of `lk2nd` (acting as a secondary bootloader), we are able to hijack the boot process just before the stock `aboot` panics, allowing us to load unsigned Linux kernels.
-   
-2. **`lk2nd` Ext2 Bug / Kernel Panics**:
-   While `lk2nd` can parse `ext2` filesystems to find `extlinux.conf`, we discovered that it **panics** when trying to read modern `ext2` filesystems created by newer versions of `mke2fs` (such as the one used internally by `pmbootstrap`). The solution was to format the `/boot` partition (`system` / `mmcblk0p24`) using **TWRP's legacy `mke2fs` (v1.43.3)**, which creates a simpler `ext2` structure that `lk2nd` can parse without crashing.
-
-3. **Display Initialization (`cont-splash`)**:
-   Attempting to force `lk2nd` to initialize the BOE ILI9881C panel directly resulted in a kernel panic because `lk2nd`'s PMIC WLED driver does not support the I2C-based TI LM3630 backlight IC used in the A37f. The solution was to rely on **`cont-splash`**. We let OPPO's stock `aboot` initialize the display, and `lk2nd` simply draws to the existing framebuffer without touching the panel driver.
-
-4. **Early Kernel Panic (`nomodeset` & `console=tty0`)**:
-   Initially, the screen would glitch out and freeze on `Jumping to kernel via monitor`. This was due to two things:
-   - `pmbootstrap` injected `nomodeset` into `extlinux.conf`, disabling the DRM driver and leaving the screen completely dead.
-   - The kernel was outputting logs exclusively to the serial console (`ttyMSM0`). By adding `console=tty0`, the Linux boot logs were forced onto the screen, and we removed `nomodeset` to allow the DRM driver to load properly.
-
-5. **USB Networking & `sudo` Permissions**:
-   - The device's battery charger driver (`bq24190`) was missing from the kernel configuration, which caused the Battery Management System (`pm8916-bms`) to hang indefinitely in deferred probing. As a result, the USB controller could never detect the cable connection (VBUS).
-   - To force USB enumeration, we injected a hardware hack into the Device Tree (DTB) that repurposed the physical Volume Up button GPIO (`<&msmgpio 107 (GPIO_ACTIVE_HIGH)>`) into a `dummy_extcon` (virtual VBUS trigger).
-   - During the overlay injection, using `cp -a` accidentally inherited the host user's ownership (1000:1000) into the rootfs `/etc` directory. This triggered a fatal `sudo: invalid configuration: /etc must be owned by root` lockout. It was resolved by injecting a `chown -R 0:0 /sysroot/etc` step directly into the `initramfs` hook to repair permissions before boot.
-   - **How to apply the manual fix:** In case of a fresh installation, the `system` partition's default DTB and initramfs will overwrite our hacks. To re-apply the USB and `sudo` fixes, boot the device into TWRP and run the following ADB commands from your host machine to manually inject the patched files into the boot partition:
-     ```bash
-     adb shell "mkdir -p /mnt/pmos_boot && mount -t ext2 /dev/block/bootdevice/by-name/system /mnt/pmos_boot" && \
-     adb push /tmp/msm8916-oppo-a37-fixed-v3.dtb /mnt/pmos_boot/msm8916-oppo-a37.dtb && \
-     adb push /tmp/initramfs_fixed_v2 /mnt/pmos_boot/initramfs && \
-     adb shell "sync && umount /mnt/pmos_boot"
-     ```
-
-6. **WiFi Hotspot & MAC Randomization**:
-   - NetworkManager defaults to MAC Address Randomization (assigning MACs starting with `02:...`) when connecting to networks.
-   - However, many mobile hotspots (Android/iOS) actively block or ignore DHCP requests from randomized MACs, resulting in timeouts (`IP configuration could not be reserved`).
-   - The fix was to enforce the hardware's permanent MAC address by creating `/etc/NetworkManager/conf.d/disable-random-mac.conf` with `wifi.scan-rand-mac-address=no` and `wifi.cloned-mac-address=permanent`.
-
-7. **USB Extcon Dependency Cycle & Black Screen**:
-   - We faced a persistent bug where the USB gadget driver failed to load, leading to a black screen after the kernel jump and a `deferred probe pending` loop for the USB controller (`78d9000.usb`).
-   - This was diagnosed as an extcon dependency cycle. The fix involved correcting our `dummy_extcon` driver initialization in the DTB. We changed the `compatible` string to `"linux,extcon-usb-gpio"` (instead of just `"extcon-usb-gpio"`) and updated the property to `vbus-gpios` (from the legacy `vbus-gpio`). This successfully initialized the UDC, breaking the cycle and enabling the `172.16.42.1` USB network tethering.
-
-8. **Missing WiFi Firmware (`linux-firmware-qcom`)**:
-   - The original port lacked the proprietary firmware required by the WCN3620 chip to initialize Wi-Fi (`wlan0`). When users generated a fresh rootfs via `pmbootstrap install`, Wi-Fi would silently fail.
-   - We injected the `linux-firmware-qcom` package into the `device-oppo-a37f`'s `APKBUILD` dependencies to permanently bake the proprietary firmware into the `pmOS_root.img`. This ensures `wlan0` is always available out-of-the-box.
-
-
 ## Installation Instructions
 
 We have provided a fully automated TWRP installer zip that handles the complex formatting and placement of files.
