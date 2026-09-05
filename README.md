@@ -114,7 +114,7 @@ We have provided a fully automated TWRP installer zip that handles the complex f
 
 4. **Reboot**:
    Go to Reboot -> System. 
-   You will briefly see the OPPO logo, followed by the `lk2nd` log (`Jumping to kernel via monitor`), and finally the postmarketOS booting sequence with the Buffyboard on-screen keyboard!
+   You will briefly see the OPPO logo, followed by the `lk2nd` log (`Jumping to kernel via monitor`), and finally the postmarketOS booting sequence with the Phosh login!
    
     **Login Credentials (if required):**
     | | |
