@@ -136,6 +136,10 @@ We have provided a fully automated TWRP installer zip that handles the complex f
 3. **Flash the Root Filesystem (`pmOS_root.img`)**:
    In TWRP, you must overwrite the `userdata` partition with the postmarketOS root filesystem.
    Using ADB shell (or TWRP terminal):
+
+> [!IMPORTANT]
+> If you execute the command below and a reboot occurs, immediately return and run the command again.
+
    ```bash
    adb push pmos-oppo-a37f-installer.zip /sdcard
    cat pmOS_root.img | adb shell "dd of=/dev/block/bootdevice/by-name/userdata bs=1048576"
