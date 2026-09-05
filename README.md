@@ -59,6 +59,8 @@
 | **FDE** | *Untested* |
 | **USB OTG** | ![](https://img.shields.io/badge/Works-success) |
 | **Accelerometer** | ![](https://img.shields.io/badge/Works-success) |
+| **Proximity sensor** | ![](https://img.shields.io/badge/Works-success) |
+| **Light sensor** | ![](https://img.shields.io/badge/Works-success) |
 ---
 
 # postmarketOS on OPPO A37f (MSM8916)
