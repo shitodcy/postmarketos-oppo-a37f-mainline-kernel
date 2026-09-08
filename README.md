@@ -105,6 +105,8 @@ We have provided a fully automated TWRP installer zip that handles the complex f
 
 > [!IMPORTANT]
 > If you execute the command below and a reboot occurs, immediately return and run the command again.
+> 
+> If you are using Windows, please find your own method, as the commands below have only been tested in a Linux terminal.
 
    ```bash
    adb push pmos-oppo-a37f-installer.zip /sdcard
